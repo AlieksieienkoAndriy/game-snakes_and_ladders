@@ -1,7 +1,7 @@
 import Phaser         from 'phaser';
 
 import { LoadingBar } from '../classes/LoadingBar';
-import {config} from '../../index';
+import { config }     from '../../index';
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -26,13 +26,17 @@ export class PreloadScene extends Phaser.Scene {
     this.load.spritesheet('dice', './assets/sprites/dice.png', {
       frameWidth : 75,
       frameHeight: 75,
-    })
+    });
+
+    this.load.audio('theme', './assets/sounds/theme.mp3');
+    this.load.audio('button', './assets/sounds/button.mp3');
+    this.load.audio('dice', './assets/sounds/dices.mp3');
+    this.load.audio('step', './assets/sounds/step.mp3');
+    this.load.audio('ladder', './assets/sounds/ladder.mp3');
+    this.load.audio('snake', './assets/sounds/snake.mp3');
+    this.load.audio('win', './assets/sounds/win.mp3');
   }
   create() {
      this.scene.start('Start');
-  }
-
-  update() {
-    
-  }
+  }  
 } 

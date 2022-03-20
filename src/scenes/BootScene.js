@@ -5,7 +5,7 @@ export class BootScene extends Phaser.Scene {
       super('Boot');
   }
   preload() {
-    this.load.image('bg_blur', './assets/sprites/blurBG.jpg')
+    this.load.image('bg_blur', './assets/sprites/blurBg.jpg')
     
   }
   create() {

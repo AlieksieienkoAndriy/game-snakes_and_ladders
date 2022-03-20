@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+
 import { config }          from '../../index';
 import { Button }          from '../classes/Button';
 import { InteractiveText } from '../classes/InteractiveText';
@@ -19,6 +20,8 @@ export class StartScene extends Phaser.Scene {
 
     this.background = this.add.image(centerX, centerY, 'bg');
 
+    this.clickSound = this.sound.add('button');
+
     this.createMenu(); 
     this.createRules(); 
   }  
@@ -34,14 +37,20 @@ export class StartScene extends Phaser.Scene {
     
     const playTextParams = {
       ...config.menu.playText,
-      callback: () => this.scene.start('Game'),
+      callback: () => {
+        this.clickSound.play();
+        this.scene.start('Game');
+      },
     }
     const playText = new InteractiveText(playTextParams, this);
     menu.add(playText);  
     
     const rulesTextParams = {
       ...config.menu.rulesText,
-      callback: () => this.rules.visible = true,
+      callback: () => {
+        this.clickSound.play();        
+        this.rules.visible = true;
+      },
     }
     const rulesText = new InteractiveText(rulesTextParams, this);        
     menu.add(rulesText);    

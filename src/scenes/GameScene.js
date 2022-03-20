@@ -1,5 +1,6 @@
 import Phaser     from "phaser";
-import {config} from '../../index';
+
+import {config}   from '../../index';
 import { Button } from "../classes/Button";
 import { Player } from "../classes/Player";
 
@@ -30,7 +31,8 @@ export class GameScene extends Phaser.Scene {
     this.createAnims();
     this.createSpaces();
     this.createPlayers();
-    this.createEventListeners();    
+    this.createEventListeners();
+    this.createSounds();    
   }
 
   createButtons() {
@@ -42,7 +44,8 @@ export class GameScene extends Phaser.Scene {
       x       : config.exitButton.x, 
       y       : config.exitButton.y, 
       texture : config.exitButton.texture, 
-      callback: () => {
+      callback: () => {        
+        this.soundtrack.stop();
         this.scene.start('Start');
       },
     };
@@ -65,9 +68,8 @@ export class GameScene extends Phaser.Scene {
    
     this.exitButton = new Button(exitButtonParams, null, this);    
     this.firstButton = new Button(firstButtonParams, config.firstButton.textParams, this);
-    this.secondButton = new Button(secondButtonParams, config.secondButton.textParams, this);    
-      
-    // this.firstButton.disable();
+    this.secondButton = new Button(secondButtonParams, config.secondButton.textParams, this);      
+    
     this.secondButton.disable();
   }
 
@@ -120,8 +122,7 @@ export class GameScene extends Phaser.Scene {
       this.spaces[space].moveTo = moving[space];
     })
     
-    this.spaces[this.spaces.length - 1].isFinish = true;
-    console.log(this.spaces);
+    this.spaces[this.spaces.length - 1].isFinish = true;   
   }
 
   createPlayers() {
@@ -171,13 +172,26 @@ export class GameScene extends Phaser.Scene {
     this.gameOverEvent.on('gameOver', this.showFinalWindow, this);
   }
 
+  createSounds() {
+    this.soundtrack = this.sound.add('theme');
+    this.soundtrack.play({
+      volume: 0.3,
+      loop  : true,
+    });
+    this.moveSound = this.sound.add('step');
+    this.ladderSound = this.sound.add('ladder');
+    this.snakeSound = this.sound.add('snake');    
+    this.diceSound = this.sound.add('dice');
+    this.winSound = this.sound.add('win');
+  }
+
   roll(player, button) {
     this.rollEvent.emit('roll', button);
 
-    this.diceValue = Phaser.Math.Between(1, 6);
-    console.log(this.diceValue);
+    this.diceValue = Phaser.Math.Between(1, 6);    
 
     this.dice.play('' + this.diceValue);
+    this.diceSound.play({delay: 0.2,});
 
     this.time.addEvent({
       delay        : 2000,
@@ -189,6 +203,9 @@ export class GameScene extends Phaser.Scene {
   }
   
   showFinalWindow(player) {
+    this.soundtrack.stop();
+    this.winSound.play();
+
     this.bg = this.add.image(this.centerX, this.centerY, 'finalBg');   
     this.bg.alpha = 0.9;
 

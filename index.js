@@ -16,14 +16,8 @@ export const config = {
       height    : 1366,
     },
     
-    // backgroundColor: 0xffffff,    
-  
     scene: [BootScene, PreloadScene, StartScene, GameScene],
     gameConfig, 
   }
   
-  if (window.screen.availWidth < window.screen.availHeight) {
-    config.scale.width = 535;
-  }
-  
-  let game = new Phaser.Game(config);
+let game = new Phaser.Game(config);

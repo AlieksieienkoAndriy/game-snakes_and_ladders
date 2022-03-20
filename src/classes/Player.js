@@ -16,6 +16,8 @@ export class Player {
        
     let space = this.scene.spaces[this.count];
 
+    this.scene.moveSound.play({delay: 0.5});
+
     this.scene.tweens.add({
       targets : [this.token],
       x       : space.x + this.params.token.offset,
@@ -41,6 +43,13 @@ export class Player {
     }
 
     if (space.hasOwnProperty('moveTo')) {
+      console.log();
+      if (this.count < space.moveTo) {
+        this.scene.ladderSound.play();
+      } else {
+        this.scene.snakeSound.play();
+      }
+
       this.count = space.moveTo;
 
       let targetSpace = this.scene.spaces[this.count];

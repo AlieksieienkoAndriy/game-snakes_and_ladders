@@ -3,14 +3,25 @@ export class Button {
     this.scene = scene;
     this.active = true;
 
+    this.sound = this.scene.sound.add('button');
+
     this.container = this.scene.add.container();
 
     this.button = this.scene.add.sprite(0, 0, 'atlas', buttonParams.texture);
     this.button.setInteractive();
     this.button.on('pointerdown', () => {
+      this.sound.play();
+      this.disable(true);
+
       this.scene.time.addEvent({
         delay        : 150,        
-        callback     : buttonParams.callback,
+        callback     : () => {
+          buttonParams.callback();
+
+          if (this.active) {
+            this.enable();
+          }
+        },
         callbackScope: this,
       });      
 
@@ -22,9 +33,7 @@ export class Button {
         yoyo    : true,        
       });
     }, this.scene);
-    this.container.add(this.button);
-
-    console.log(this.button);
+    this.container.add(this.button);    
 
     if (textParams) {
       this.buttonText = this.scene.add.text(0, 0, textParams.text, textParams.style);
@@ -35,8 +44,8 @@ export class Button {
      this.container.setPosition(buttonParams.x, buttonParams.y)  
   }
 
-  disable() {
-    this.active = false;
+  disable(isActive) {
+    this.active = isActive;
 
     this.container.alpha = 0.3    
     this.button.disableInteractive();
